@@ -1,0 +1,40 @@
+# Entorno virtual
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Generados localmente (cada usuario los crea con run_app.py extract)
+db.json
+temarios/*
+!temarios/.gitkeep
+
+# Variables de entorno / secretos
+.env
+.env.*
+
+# IDE y editores
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs y cachés
+*.log
+.cache/
