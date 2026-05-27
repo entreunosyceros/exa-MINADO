@@ -1,5 +1,7 @@
 # exa-MINADO - Buscador de temario (PDF / DOCX)
 
+<img width="1200" height="655" alt="exa-MINADO" src="https://github.com/user-attachments/assets/d1e480a3-a005-4398-a354-5588fa7a02a8" />
+
 Herramienta mínima en Python para indexar apuntes en PDF y DOCX y buscarlos con una caja flotante (Tkinter). El extractor se ejecuta una vez; el buscador lee `db.json` al instante.
 
 ## Estructura del proyecto
