@@ -23,18 +23,4 @@ temarios/*
 .env
 .env.*
 
-# IDE y editores
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
 
-# Sistema operativo
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Logs y cachés
-*.log
-.cache/

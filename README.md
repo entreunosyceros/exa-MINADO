@@ -44,7 +44,7 @@ sudo apt install tesseract-ocr tesseract-ocr-spa
 # Windows: instalador desde UB Mannheim (incluir idioma Spanish)
 ```
 
-El extractor detecta páginas con poco texto y aplica OCR automáticamente. Está optimizado para **diapositivas UF1465** (una imagen PNG 1376×768 por página, fondo claro): lee la imagen embebida sin binarizar agresivamente. Instala `tesseract-ocr-spa` para castellano.
+El extractor detecta páginas con poco texto y aplica OCR automáticamente. Está optimizado para **diapositivas UF1465** (una imagen PNG 1376×768 por página, fondo claro). Los **`.png` sueltos** en `temarios/` también se indexan con OCR (Tesseract). Instala `tesseract-ocr-spa` para castellano.
 
 Instalación manual (opcional):
 
@@ -60,7 +60,7 @@ python buscador.py
 
 ### 1. Preparar el temario
 
-Copia tus archivos `.pdf` y `.docx` en la carpeta `temarios/`.
+Copia tus archivos `.pdf`, `.docx` e imágenes `.png` en la carpeta `temarios/`.
 
 ### 2. Generar la base de datos
 
@@ -121,7 +121,7 @@ La ventana permanece siempre visible (`topmost`). Usa la barra de título del si
 
 - En DOCX, `pagina` se aproxima según saltos de página del documento; en PDF corresponde al número de página real.
 - El extractor también indexa tablas de los DOCX (celdas unidas con ` | `).
-- Los PDF escaneados o con diapositivas en imagen tardan más (OCR a 300 DPI). Regenera con `python run_app.py extract` tras cambiar el temario.
+- Los PDF escaneados, diapositivas en imagen o **PNG** tardan más (OCR). Regenera con `python run_app.py extract` tras cambiar el temario.
 - En **DOCX**, el clic abre el archivo; el número de página del índice es orientativo (Word/LibreOffice no reciben página por línea de comandos).
 - En **Windows**, la página exacta en PDF funciona mejor con [SumatraPDF](https://www.sumatrapdfreader.org/) instalado.
 - `db.json` puede crecer mucho con temarios grandes; conviene regenerarlo solo cuando cambie el material.

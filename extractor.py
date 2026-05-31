@@ -1,4 +1,4 @@
-"""Lee PDF/DOCX de la carpeta temarios/ y genera db.json."""
+"""Lee PDF/DOCX/PNG de la carpeta temarios/ y genera db.json."""
 
 import json
 import os
@@ -39,7 +39,7 @@ from docx.oxml.ns import qn
 
 CARPETA_DOCUMENTOS = Path(__file__).parent / "temarios"
 ARCHIVO_DB = Path(__file__).parent / "db.json"
-EXTENSIONES = {".pdf", ".docx"}
+EXTENSIONES = {".pdf", ".docx", ".png"}
 # Si una página tiene poco texto, se intenta OCR (PDF escaneado / diapositivas en imagen)
 MIN_TEXTO_PAGINA = 40
 MIN_TEXTO_CON_IMAGENES = 250
@@ -137,7 +137,8 @@ def _luminosidad_media(imagen) -> float:
     muestra = gris.resize(
         (min(160, gris.width), min(160, gris.height)), Image.Resampling.LANCZOS
     )
-    return sum(muestra.getdata()) / (muestra.width * muestra.height)
+    pixels = muestra.get_flattened_data()
+    return sum(pixels) / len(pixels)
 
 
 def _preprocesar_imagen(imagen):
@@ -413,11 +414,31 @@ def extraer_docx(ruta: Path) -> list[dict]:
     return registros
 
 
+def extraer_png(ruta: Path) -> list[dict]:
+    from PIL import Image
+
+    if not ocr_disponible():
+        avisar_ocr_no_disponible()
+        print(f"  [!] Sin OCR, se omite {ruta.name}")
+        return []
+
+    imagen = Image.open(ruta)
+    parrafos = _parrafos_desde_imagen(imagen)
+    if parrafos:
+        print(f"  OCR: {len(parrafos)} línea(s) reconocidas")
+    return [
+        {"archivo": ruta.name, "pagina": 1, "texto": parrafo}
+        for parrafo in parrafos
+    ]
+
+
 def extraer_archivo(ruta: Path) -> list[dict]:
     if ruta.suffix.lower() == ".pdf":
         return extraer_pdf(ruta)
     if ruta.suffix.lower() == ".docx":
         return extraer_docx(ruta)
+    if ruta.suffix.lower() == ".png":
+        return extraer_png(ruta)
     return []
 
 
@@ -425,7 +446,7 @@ def construir_base() -> list[dict]:
     if not CARPETA_DOCUMENTOS.is_dir():
         CARPETA_DOCUMENTOS.mkdir(parents=True)
         print(f"Carpeta creada: {CARPETA_DOCUMENTOS}")
-        print("Coloca ahí tus PDF y DOCX y vuelve a ejecutar este script.")
+        print("Coloca ahí tus PDF, DOCX y PNG y vuelve a ejecutar este script.")
         return []
 
     archivos = sorted(
@@ -433,7 +454,7 @@ def construir_base() -> list[dict]:
     )
 
     if not archivos:
-        print(f"No hay PDF ni DOCX en {CARPETA_DOCUMENTOS}")
+        print(f"No hay PDF, DOCX ni PNG en {CARPETA_DOCUMENTOS}")
         return []
 
     base: list[dict] = []
